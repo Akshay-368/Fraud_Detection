@@ -1,0 +1,91 @@
+
+### `instructions.txt`
+
+```
+# Dataset Instructions for Fraud Detection Model
+
+## Overview:
+The dataset used for fraud detection has been split into smaller parts due to GitHub's file size limitations (maximum 25 MB per file). Please follow the instructions below to download, merge, and use the dataset.
+
+## Files Included:
+The dataset has been split into the following parts:
+- creditcard.parquet.gz_part1.gz
+- creditcard.parquet.gz_part2.gz
+- creditcard.parquet.gz_part3.gz
+- (and so on)
+
+**IMPORTANT:** You need to download *all parts* of the dataset to successfully use it.
+
+---
+
+## Step 1: Download All Dataset Parts
+1. Download the following files from the repository:
+   - `creditcard.parquet.gz_part1.gz`
+   - `creditcard.parquet.gz_part2.gz`
+   - `creditcard.parquet.gz_part3.gz`
+   - (Add additional parts here)
+
+2. **Ensure that all parts are in the same directory.**
+
+---
+
+## Step 2: Combine the Dataset Parts
+Once all parts have been downloaded, you need to merge them into a single file. You can use the following Python script to do so.
+
+### Python Script to Merge the Parts:
+```python
+import gzip
+import shutil
+
+def combine_parts(part_files, output_file):
+    with open(output_file, 'wb') as f_out:
+        for part_file in part_files:
+            with gzip.open(part_file, 'rb') as f_in:
+                shutil.copyfileobj(f_in, f_out)
+    print(f"Combined file saved to {output_file}")
+
+# List of all part files
+parts = [
+    "creditcard.parquet.gz_part1.gz",
+    "creditcard.parquet.gz_part2.gz",
+    "creditcard.parquet.gz_part3.gz",  # Add more parts if necessary
+]
+
+# Output file name
+output = "creditcard.parquet.gz"
+
+# Combine the parts
+combine_parts(parts, output)
+```
+
+- This script will merge the parts into a single `creditcard.parquet.gz` file.
+- **Make sure that all part files are in the same directory as this script before running it.**
+
+---
+
+## Step 3: Loading the Combined Dataset
+Once the parts are merged, you can load the dataset using the following code:
+
+```python
+import pandas as pd
+
+# Load the combined dataset
+df = pd.read_parquet("creditcard.parquet.gz")
+print(df.head())
+```
+
+---
+
+## Troubleshooting:
+
+**Q:** What if I don't have all the parts?
+- **A:** You need *all* parts of the dataset to successfully merge and use it. Make sure you have downloaded every part before proceeding.
+
+**Q:** What if I encounter issues while merging the files?
+- **A:** Ensure the part files are named correctly and are in the same directory. If the script still fails, please open an issue on the repository, and we’ll assist you.
+
+---
+
+## Conclusion:
+Once the dataset is combined and loaded, you can proceed with the fraud detection analysis as usual. Thank you for your understanding, and feel free to reach out if you encounter any issues!
+
